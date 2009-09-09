@@ -5,7 +5,10 @@ var Collecta = {
   _host:"http://localhost:3000",
   _resultSet:[],
   _t:"",
-  _q:""
+  _q:"",
+  api_key:"660c2b67935a96fe8bddc7eb94f182e0",
+  api_host:"http://api.collecta.com/search",
+  api_format:"atom"
 };
 
 /**
@@ -50,6 +53,7 @@ Collecta.fetchStyles = function() {
  **/
 Collecta.fetchTemplates = function() {
   $.getJSON(this._host + '/templates?callback=?', function(r) {
+    console.log('templates fetched');
     Collecta._t = unescape(r);
     Collecta.showResults();
   });
@@ -59,20 +63,32 @@ Collecta.fetchTemplates = function() {
  * Guess the intended query from our environment
  **/
 Collecta.guessQuery = function() {
-  console.log(window);
-  return 'capital factory';
+  var query;
+  var params = window.location.href.split('&');
+  $.each(params, function(i, pair) {
+    var parts = pair.split('=');
+    if(parts[0] == 'q') {
+      query = parts[1];
+      return false;
+    }
+  });
+
+  return (typeof query == 'undefined') ? 'capital factory' : query;
 };
 
 /**
  * Do a collecta search
  **/
 Collecta.search = function(q, cb) {
-
+  this._q = q;
   var results;
 
-  results = "{}";
+  var uri = this.api_host + '?api_key=' + this.api_key + 
+    '&format=' + this.api_format + '&callback=?&q=' + this._q;
+  $.getJSON(uri, function(r) {
+    cb.apply(Collecta, [r.results]);
+  });
 
-  cb.apply(Collecta, [results]);
 };
 
 /**
@@ -88,5 +104,30 @@ Collecta.parseResults = function(results) {
  *    and search results
  **/
 Collecta.showResults = function() {
-  console.log(Collecta._resultSet, Collecta._t);
+
+  // do we have our search results? if
+  // not, just show a loading screen
+  if($('#collecta').length < 1) {
+    Collecta.showSidebar();
+    Collecta.showResults();
+    return;
+  }
+
+  var r = Collecta._resultSet;
+  console.log(r);
+
+};
+
+/**
+ * Show collecta Sidebar
+ **/
+Collecta.showSidebar = function() {
+  console.log('showing sidebar');
+  var $html = $('<div>' + this._t + '</div>');
+
+  var base = $.template($('#base', $html).html())
+  
+  $('body').append(base, {
+    "query":this._q
+  });
 };

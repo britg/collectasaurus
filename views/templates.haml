@@ -1,3 +1,14 @@
-#collecta
-  %h1 Realtime results
-  %p powered by "collecta"
+#base.template
+  #collecta
+    #collecta-sidebar
+      .container
+        .box
+          %h3.title Realtime results for "${query}"
+          %p powered by <a href="http://collecta.com/#q=${query}">Collecta</a>
+          %p Loading...
+          #collecta-results
+
+#result.template
+  .collecta-result
+
+
