@@ -2,7 +2,8 @@
  * Collecta Namespace
  **/
 var Collecta = {
-  _host:"http://174.129.20.246",
+  //_host:"http://174.129.20.246",
+  _host:"http://localhost:3000",
   _resultSet:[],
   _t:"",
   _q:"",
@@ -125,7 +126,7 @@ Collecta.showResults = function() {
       var rClone = $.template($('#result', Collecta._t).html());
       $('#collecta-results').append(rClone, {
         "result_title": '<a href="' + item.link + '">' + item.title + '</a>',
-        "result_description":item.description
+        "result_description":item.abstract
       });
     }
   });
