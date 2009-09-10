@@ -2,8 +2,8 @@
  * Collecta Namespace
  **/
 var Collecta = {
-  _host:"http://174.129.20.246",
-  //_host:"http://localhost:3000",
+  //_host:"http://174.129.20.246",
+  _host:"http://localhost:3000",
   _resultSet:[],
   _t:"",
   _q:"",
@@ -57,7 +57,6 @@ Collecta.fetchStyles = function() {
  **/
 Collecta.fetchTemplates = function(cb) {
   $.getJSON(this._host + '/templates?callback=?', function(r) {
-    console.log('templates received');
     Collecta._t = $('<div>' + unescape(r) + '</div>');
     Collecta.showSidebar();
     cb.apply();
@@ -124,11 +123,7 @@ Collecta.showResults = function() {
     if(item) {
       console.log(item);
       var rClone = $.template($('#result', Collecta._t).html());
-      $('#collecta-results').append(rClone, {
-        "result_title": '<a href="' + item.link + '">' + item.title + '</a>',
-        "result_description":item.abstract,
-        "result_type":item.category
-      });
+      $('#collecta-results').append(rClone, item);
     }
   });
 

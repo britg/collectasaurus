@@ -17,7 +17,7 @@
 #result.template
   %li.collecta-result
     %h4
-      %span.result-type ${result_type}
-      ${result_title}
+      %span.result-type [${category}]
+      <a href="${link}">${title}</a>
 
-    %p ${result_description}
+    %p ${abstract}

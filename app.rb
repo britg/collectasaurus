@@ -41,7 +41,7 @@ get '/' do
 end
 
 get '/templates' do
-  html = haml :templates
+  html = haml :templates, :haml_options => {:escape_html => false}
   callback = params[:callback];
   callback << '("' << html.gsub('"', '\"').gsub(/[\s]+/, "\s") << '");'
 end
