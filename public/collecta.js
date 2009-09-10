@@ -20,23 +20,32 @@ Collecta.init = function() {
   // featch our styles
   Collecta.fetchStyles();
   
-  // guess query
-  var query = Collecta.guessQuery();
-
   // fetch our templates
+  var query = Collecta.guessQuery();
   Collecta.fetchTemplates(function() {
-
-    Collecta.search(query, function(results) {
-
-      // parse response from collecta
-      Collecta.parseResults(results);
-
-      // display the results
-      Collecta.showResults();
-    });
+    Collecta.activate(query);
   });
+};
 
+/**
+ * Activate
+ **/
+Collecta.activate = function(query) {
 
+  if(typeof query == 'undefined') {
+    query = Collecta.guessQuery();
+  }
+
+  Collecta.showSidebar();
+
+  Collecta.search(query, function(results) {
+
+    // parse response from collecta
+    Collecta.parseResults(results);
+
+    // display the results
+    Collecta.showResults();
+  });
 };
 
 /**
@@ -134,7 +143,7 @@ Collecta.showResults = function() {
  **/
 Collecta.showSidebar = function() {
 
-  if($('#collecta').length > 0 || this._t.length < 1) return;
+  if($('#collecta-sidebar').length > 0 || this._t.length < 1) return;
 
   console.log('showing sidebar', Collecta._t);
 
@@ -144,3 +153,28 @@ Collecta.showSidebar = function() {
     "query": Collecta._q
   });
 };
+
+/**
+ * Hide sidebar
+ **/
+Collecta.hideSidebar = function() {
+
+  $('#collecta-sidebar').remove();
+
+  // show some sort of tab or something
+  Collecta.showTab();
+};
+
+/**
+ * Show tab
+ **/
+Collecta.showTab = function() {
+  
+  // create it only once
+  if($('#collecta-tab').length > 0) return;
+
+  var tab = $.template($('#tab', Collecta._t).html());
+  $('#collecta').append(tab);
+};
+
+window.Collecta = Collecta;

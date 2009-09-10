@@ -2,7 +2,7 @@
   #collecta
     #collecta-sidebar
       .box
-        %a.close X Close
+        %a.close{:href=>"#", :onclick=>"Collecta.hideSidebar(); return false;"} X Close
         %h3.title Loading real-time results for "${query}" ...
         %p powered by <a href="http://collecta.com/">Collecta</a>
         %p Loading...
@@ -10,6 +10,7 @@
 
 #results.template
   .box
+    %a.close{:href=>"#", :onclick=>"Collecta.hideSidebar(); return false;"} X Close
     %h3.title Real-time results for "${query}"
     %p powered by <a href="http://collecta.com/#q=${query}">Collecta</a>
     %ul#collecta-results
@@ -22,3 +23,6 @@
       %a{:href=>"${link}"} ${title}
 
     %p ${abstract}
+
+#tab.template
+  %a#collecta-tab{:href=>"#", :onclick=>"Collecta.activate(); return false;"} Collecta
