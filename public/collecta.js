@@ -18,20 +18,23 @@ Collecta.init = function() {
 
   // featch our styles
   Collecta.fetchStyles();
+  
+  // guess query
+  var query = Collecta.guessQuery();
 
   // fetch our templates
-  Collecta.fetchTemplates();
+  Collecta.fetchTemplates(function() {
 
-  // determine search query and do search
-  var query = Collecta.guessQuery();
-  Collecta.search(query, function(results) {
+    Collecta.search(query, function(results) {
 
-    // parse response from collecta
-    Collecta.parseResults(results);
+      // parse response from collecta
+      Collecta.parseResults(results);
 
-    // display the results
-    Collecta.showResults();
+      // display the results
+      Collecta.showResults();
+    });
   });
+
 
 };
 
@@ -51,11 +54,12 @@ Collecta.fetchStyles = function() {
 /**
  * Fetch templates
  **/
-Collecta.fetchTemplates = function() {
+Collecta.fetchTemplates = function(cb) {
   $.getJSON(this._host + '/templates?callback=?', function(r) {
-    console.log('templates fetched');
-    Collecta._t = unescape(r);
-    Collecta.showResults();
+    console.log('templates received');
+    Collecta._t = $('<div>' + unescape(r) + '</div>');
+    Collecta.showSidebar();
+    cb.apply();
   });
 };
 
@@ -73,20 +77,20 @@ Collecta.guessQuery = function() {
     }
   });
 
-  return (typeof query == 'undefined') ? 'capital factory' : query;
+  return this._q = (typeof query == 'undefined') ? 'iPod' : query;
 };
 
 /**
  * Do a collecta search
  **/
 Collecta.search = function(q, cb) {
-  this._q = q;
   var results;
 
   var uri = this.api_host + '?api_key=' + this.api_key + 
-    '&format=' + this.api_format + '&callback=?&q=' + this._q;
+    '&format=' + this.api_format + '&callback=?&q=' + q;
   $.getJSON(uri, function(r) {
-    cb.apply(Collecta, [r.results]);
+    console.log('search results received');
+    cb.apply(Collecta, [r]);
   });
 
 };
@@ -104,17 +108,27 @@ Collecta.parseResults = function(results) {
  *    and search results
  **/
 Collecta.showResults = function() {
+  console.log('showing results');
 
-  // do we have our search results? if
-  // not, just show a loading screen
-  if($('#collecta').length < 1) {
-    Collecta.showSidebar();
-    Collecta.showResults();
-    return;
-  }
+  // replace loading with results
+  var resultWrap = $.template($('#results', Collecta._t).html());
+  $('#collecta-sidebar').html(resultWrap, {
+    "query": Collecta._q
+    });
 
-  var r = Collecta._resultSet;
-  console.log(r);
+  var results = new JAtom(Collecta._resultSet);
+  console.log(results);
+
+  $.each(results.items, function(i, item) {
+    if(item) {
+      console.log(item);
+      var rClone = $.template($('#result', Collecta._t).html());
+      $('#collecta-results').append(rClone, {
+        "result_title": '<a href="' + item.link + '">' + item.title + '</a>',
+        "result_description":item.description
+      });
+    }
+  });
 
 };
 
@@ -122,12 +136,14 @@ Collecta.showResults = function() {
  * Show collecta Sidebar
  **/
 Collecta.showSidebar = function() {
-  console.log('showing sidebar');
-  var $html = $('<div>' + this._t + '</div>');
 
-  var base = $.template($('#base', $html).html())
-  
-  $('body').append(base, {
-    "query":this._q
+  if($('#collecta').length > 0 || this._t.length < 1) return;
+
+  console.log('showing sidebar', Collecta._t);
+
+  var loading = $.template($('#loading', Collecta._t).html());
+
+  $('body').append(loading, {
+    "query": Collecta._q
   });
 };

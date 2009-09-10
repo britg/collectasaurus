@@ -43,5 +43,5 @@ end
 get '/templates' do
   html = haml :templates
   callback = params[:callback];
-  callback << '("' << URI.escape(html).to_s << '");'
+  callback << '("' << html.gsub('"', '\"').gsub(/[\s]+/, "\s") << '");'
 end
