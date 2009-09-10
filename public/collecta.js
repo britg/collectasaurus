@@ -2,7 +2,7 @@
  * Collecta Namespace
  **/
 var Collecta = {
-  _host:"http://localhost:3000",
+  _host:"http://174.129.20.246/",
   _resultSet:[],
   _t:"",
   _q:"",
