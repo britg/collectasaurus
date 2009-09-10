@@ -9,7 +9,8 @@ var Collecta = {
   _q:"",
   api_key:"660c2b67935a96fe8bddc7eb94f182e0",
   api_host:"http://api.collecta.com/search",
-  api_format:"atom"
+  api_format:"atom",
+  auto_show:true
 };
 
 /**
@@ -23,7 +24,10 @@ Collecta.init = function() {
   // fetch our templates
   var query = Collecta.guessQuery();
   Collecta.fetchTemplates(function() {
-    Collecta.activate(query);
+
+    if(Collecta.auto_show)
+      Collecta.activate(query);
+
   });
 };
 
