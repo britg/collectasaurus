@@ -40,6 +40,10 @@ get '/' do
   haml :index
 end
 
+get '/dev' do
+  haml :dev
+end
+
 get '/templates' do
   html = haml :templates, :haml_options => {:escape_html => false}
   callback = params[:callback];
