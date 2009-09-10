@@ -1,0 +1,26 @@
+!!!
+!!! XML
+!!! Strict
+%html{ :xmlns => "http://www.w3.org/1999/xhtml", :lang => "en", 'xml:lang' => "en" }
+  %head
+    %title compass sinatra
+    %meta{'http-equiv'=>"Content-Type", :content=>"text/html; charset=iso-8859-1"}/
+    %meta{'http-equiv'=>"Content-Language", :content=>"en-us"}/
+    %link{:href=>"/stylesheets/screen.css", :media=>"screen", :rel=>"stylesheet", :type=>"text/css"}/
+  %body
+    .container
+      .header
+        %h1 Collecta Bookmarklet
+      .body
+        %p Instructions: Click and drag the following link to your Firefox bookmarks bar. (Enabled via View -> Toolbars -> Bookmarks).  
+        
+        %p In Internet Explorer, right click the following link and choose 'Add to Favorites.'  Be sure to add to your favorites toolbar in the Add To Favorites prompt.
+
+        %p On any Google, Bing, or Yahoo search results page simply click the bookmarklet to get real-time search results courtesy of <a href="http://collecta.com">Collecta</a>!
+
+        %a{:href=>"javascript:var h='http://174.129.20.246/scripts/app.js?_='+Math.random(); var d=document; var s=d.createElement('script'); s.src=h; var b=d.getElementsByTagName('body'); b[0].appendChild(s); void(0);"}Bookmarklet
+
+      .footer
+        %p
+
+<script src="http://localhost:3000/scripts/app.js"></script>
