@@ -72,12 +72,12 @@ Collecta.guessQuery = function() {
   $.each(params, function(i, pair) {
     var parts = pair.split('=');
     if(parts[0] == 'q') {
-      query = parts[1];
+      query = decodeURI(parts[1]);
       return false;
     }
   });
 
-  return this._q = (typeof query == 'undefined') ? 'iPod' : query;
+  return this._q = (typeof query == 'undefined') ? 'iPod' : query.replace(/\+/g, ' ');
 };
 
 /**
@@ -87,7 +87,7 @@ Collecta.search = function(q, cb) {
   var results;
 
   var uri = this.api_host + '?api_key=' + this.api_key + 
-    '&format=' + this.api_format + '&callback=?&q=' + q;
+    '&format=' + this.api_format + '&callback=?&q="' + q + '"';
   $.getJSON(uri, function(r) {
     console.log('search results received');
     cb.apply(Collecta, [r]);

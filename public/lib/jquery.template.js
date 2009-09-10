@@ -34,7 +34,7 @@
 	 * Create a New Template
 	 */
 	$.template = function(html, options) {
-    return new $.template.instance(unescape(html), options);
+    return new $.template.instance(decodeURI(html), options);
 	};
 
 	/**
