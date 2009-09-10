@@ -126,7 +126,8 @@ Collecta.showResults = function() {
       var rClone = $.template($('#result', Collecta._t).html());
       $('#collecta-results').append(rClone, {
         "result_title": '<a href="' + item.link + '">' + item.title + '</a>',
-        "result_description":item.abstract
+        "result_description":item.abstract,
+        "result_type":item.category
       });
     }
   });

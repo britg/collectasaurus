@@ -30,6 +30,13 @@ JAtom.prototype = {
             item.id = jQuery(this).find('id').eq(0).text();
             item.abstract = jQuery(this).find('abstract').eq(0).text();
             item.category = jQuery(this).find('category').eq(0).text();
+
+            switch(item.category) {
+              case 'photo':
+                item.abstract = jQuery(this).find('subtitle').eq(0).text();
+                console.log('photo found!', item);
+                break;
+            }
             
             feed.items.push(item);
         });
